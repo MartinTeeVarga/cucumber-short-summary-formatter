@@ -1,0 +1,46 @@
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+    id 'net.researchgate.release' version '2.5.0'
+}
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'info.cukes:gherkin:2.12.2'
+    compile 'info.cukes:gherkin-jvm-deps:1.0.3'
+    testCompile 'junit:junit:4.11'
+    testCompile 'info.cukes:cucumber-java8:1.2.5'
+    testCompile 'info.cukes:cucumber-junit:1.2.5'
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            from components.java
+            groupId 'com.czequered.cucumber'
+            artifactId 'short-summary-formatter'
+        }
+    }
+}
+
+bintray {
+    user = bintray.user     // saved in $GRADLE_HOME/gradle.properties
+    key = bintray.api_key   // saved in $GRADLE_HOME/gradle.properties
+    pkg {
+        repo = 'maven'
+        name = 'cucumber-short-summary-formatter'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/sm4/cucumber-short-summary-formatter.git'
+    }
+}
+
+afterReleaseBuild.dependsOn bintray
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
