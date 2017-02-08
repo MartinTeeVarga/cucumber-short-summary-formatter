@@ -26,8 +26,8 @@ import cucumber.api.java8.En;
 /**
  * @author Martin Varga
  */
-public class TestStepdefs implements En {
-    public TestStepdefs() {
+public class TestStepDefs implements En {
+    public TestStepDefs() {
         Given("^the coffee shop is open$", () -> {
         });
         Given("^the boss is around$", () -> {
