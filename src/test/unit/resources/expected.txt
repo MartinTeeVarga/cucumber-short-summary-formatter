@@ -1,0 +1,9 @@
+As a user, I want to drink coffee (Coffee)
+  My boss goes on coffee run (LazyDev, Cheapskate)
+  I go buy my own coffee (ActiveDev)
+  Someone else goes for a coffee (Cheapskate, Coffee)
+As a user, I want to eat lunch
+  Pizza day
+
+Final result: passed, tested on: @now@
+
