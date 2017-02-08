@@ -107,19 +107,23 @@ publishing {
     }
 }
 
-bintray {
-    user = bintray_user     // saved in $GRADLE_HOME/gradle.properties
-    key = bintray_api_key   // saved in $GRADLE_HOME/gradle.properties
-    pkg {
-        repo = 'maven'
-        name = project.name
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/sm4/cucumber-short-summary-formatter.git'
-    }
-    publications = ['MyPublication']
-}
+// avoid setting up bintray in Travis CI
+if (project.hasProperty('bintray_user')) {
+    println "Running locally, configuring bintray."
 
-afterReleaseBuild.dependsOn bintrayUpload
+    bintray {
+        user = bintray_user     // saved in $GRADLE_HOME/gradle.properties
+        key = bintray_api_key   // saved in $GRADLE_HOME/gradle.properties
+        pkg {
+            repo = 'maven'
+            name = project.name
+            licenses = ['MIT']
+            vcsUrl = 'https://github.com/sm4/cucumber-short-summary-formatter.git'
+        }
+        publications = ['MyPublication']
+    }
+    afterReleaseBuild.dependsOn bintrayUpload
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.3'
