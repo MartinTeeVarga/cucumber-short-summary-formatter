@@ -43,8 +43,8 @@ configurations {
 }
 
 processTestResources {
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
-    String now = dateTimeFormatter.format(LocalDateTime.now());
+    outputs.upToDateWhen { false }
+    String now = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).format(LocalDateTime.now());
     filter ReplaceTokens, tokens: [now: now]
 }
 

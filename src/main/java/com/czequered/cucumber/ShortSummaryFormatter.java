@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * @author Martin Varga
  */
 public class ShortSummaryFormatter implements Reporter, Formatter {
+    public static final String DEFAULT_REPORT_FILE = "report.txt";
     private File reportFile;
     private final PrintWriter writer;
     private final StringWriter stringWriter;
@@ -47,6 +48,9 @@ public class ShortSummaryFormatter implements Reporter, Formatter {
     private String lastScenario = null;
 
     public ShortSummaryFormatter(File reportFile) {
+        if (reportFile == null) {
+            throw new RuntimeException("Please specify the report file");
+        }
         this.reportFile = reportFile;
         stringWriter = new StringWriter();
         writer = new PrintWriter(stringWriter, true);
@@ -82,10 +86,15 @@ public class ShortSummaryFormatter implements Reporter, Formatter {
     }
 
     @Override public void close() {
+        if (reportFile.getParentFile() != null && !reportFile.getParentFile().exists()) {
+            reportFile.getParentFile().mkdirs();
+        } else if (reportFile.exists() && reportFile.isDirectory()) {
+            reportFile = new File(reportFile, DEFAULT_REPORT_FILE);
+        }
         try (PrintWriter out = new PrintWriter(reportFile)) {
             out.println(stringWriter);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot write the short report.");
+            throw new RuntimeException("Cannot write the short report.", e);
         } finally {
             writer.close();
         }

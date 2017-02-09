@@ -24,10 +24,11 @@ package com.czequered.cucumber;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -41,5 +42,38 @@ public class ShortSummaryFormatterTest {
         String expected = new String(Files.readAllBytes(Paths.get(expectedAsUrl.toURI())));
         String actual = new String(Files.readAllBytes(Paths.get("build/test-report-short.txt")));
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_create_missing_parent_directories() {
+        File parentDir = new File("build/somedir");
+        File reportFile = new File(parentDir, "somefile.txt");
+        reportFile.delete();
+        assertFalse(reportFile.exists());
+        parentDir.delete();
+        assertFalse(parentDir.exists());
+
+        ShortSummaryFormatter shortSummaryFormatter = new ShortSummaryFormatter(reportFile);
+        shortSummaryFormatter.close();
+
+        assertTrue(reportFile.exists());
+    }
+
+    @Test
+    public void should_create_default_file_if_dir_specified() {
+        File reportFile = new File("build/dir");
+        if (reportFile.exists() && reportFile.listFiles() != null) {
+            Arrays.stream(reportFile.listFiles()).forEach(File::delete);
+        }
+        reportFile.delete();
+        assertFalse(reportFile.exists());
+        reportFile.mkdirs();
+        assertTrue(reportFile.exists());
+
+        ShortSummaryFormatter shortSummaryFormatter = new ShortSummaryFormatter(reportFile);
+        shortSummaryFormatter.close();
+
+        assertTrue(reportFile.exists());
+        assertTrue(reportFile.listFiles()[0].getName().equals(ShortSummaryFormatter.DEFAULT_REPORT_FILE));
     }
 }
