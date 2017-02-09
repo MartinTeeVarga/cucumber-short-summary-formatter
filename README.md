@@ -28,7 +28,7 @@ dependencies {
 }
 ```
 
-Then use it as any other cucumber plugin, just specify the full path to the Java class in your JUnit test class:
+Then use it as any other cucumber plugin, just specify the full path to the Java class in your JUnit test class and the path to the file name. If the file is an existing directory, a file called `report.txt` will be created in that directory.
 ```
 @RunWith(Cucumber.class)
 @CucumberOptions(features={"src/test/resources/"}, plugin={"com.czequered.cucumber.ShortSummaryFormatter:build/test-report-short.txt"})
